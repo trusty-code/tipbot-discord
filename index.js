@@ -84,13 +84,22 @@ function tip(msg, args) {
                     console.log("img_url", img_url)
                     const embed = new MessageEmbed()
                         // Set the title of the field
-                        .setTitle(`Donate to: ${args[0]}`)
+                        .setTitle(`Donate to ${args[0]}`)
                         // Set the color of the embed
                         .setColor(COLOR)
+                        .setDescription("Spend some IOTA with your IOTA Wallet. Just copy the address or scan the QR code.")
                         .attachFiles(img_url)
+                        .setImage('attachment://' + found.donation_address + ".jpg")
+                        .addFields([
+                            {
+                                name: "IOTA Address",
+                                value: found.donation_address
+                            }
+                        ])
                         // Set the main content of the embed
-                        .setDescription(img_url);
-
+                        .setFooter(
+                            'Trustify IOTA TipBot'
+                        )
                     msg.channel.send(embed);
                 }).catch(err => {
                     console.error(err)
