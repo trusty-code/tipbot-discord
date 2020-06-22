@@ -5,6 +5,7 @@ const app = express();
 
 const tip = require('./src/commands/tip');
 const help = require('./src/commands/help');
+const add = require('./src/commands/add');
 
 const config = require('dotenv').config().parsed // Loads .env
 
@@ -14,7 +15,8 @@ app.use('/qr_codes', express.static(__dirname + '/qr_codes'));
 // functions
 var cmds = {
     help,
-    tip
+    tip,
+    add
 }
 
 const { COLOR, PREFIX } = require('./src/config');
