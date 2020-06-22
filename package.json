@@ -15,7 +15,10 @@
     "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "get-package-json-from-github": "^1.2.1",
+    "is-github-url": "^1.2.2",
     "qrcode": "^1.4.4",
     "request": "^2.88.2"
-  }
+  },
+  "iota_address": "VO9H9GFNRTOLPUHM9MACFWSUFLNLDYCTKIPXCYLTNNNDMURPUIXNVBYQMRKOJDEYM9UDESGXBIWASIDRBFOBHCJGZD"
 }
