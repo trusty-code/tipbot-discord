@@ -21,14 +21,16 @@ module.exports = function tip(msg, args) {
             getPackageJsonFromGithub(url)
                 .then(packageJson => {
                     console.log('packageJson name:', packageJson.name);
-                    if(packageJson.meta) {
-                        if(packageJson.iota_address) {
-                            console.log('iota address found');
-                        }
+                    console.log('packageJson name:', packageJson);
+                    if (packageJson.iota_address) {
+                        console.log('iota address found');
+                        sendDonationMessage(msg, packageJson.name, packageJson.iota_address)
+                    } else {
+                        // TODO: Add error message with "howto instructions"
                     }
                 });
-            // check in cargo.toml meta
-            // check in trustify meta
+            // TODO: check in cargo.toml meta
+            // TODO: check in trustify meta
 
         } else {
             request('https://raw.githubusercontent.com/trusty-code/tipbot-backend/master/data/websites.json', { json: true }, (err, res, body) => {
@@ -43,35 +45,7 @@ module.exports = function tip(msg, args) {
                     }
                 }
                 if (found) {
-                    QRCode.toDataURL(found.donation_address).then((res) => {
-                        var base64Data = res.replace(/^data:image\/png;base64,/, "");
-
-                        fs.writeFileSync("./qr_codes/" + found.donation_address + ".jpg", base64Data, 'base64');
-                        // Now save the data
-                        const img_url = "http://localhost:3000/qr_codes/" + found.donation_address + ".jpg"
-                        console.log("img_url", img_url)
-                        const embed = new MessageEmbed()
-                            // Set the title of the field
-                            .setTitle(`Donate to ${args[0]}`)
-                            // Set the color of the embed
-                            .setColor(COLOR)
-                            .setDescription("Spend some IOTA with your IOTA Wallet. Just copy the address or scan the QR code.")
-                            .attachFiles(img_url)
-                            .setImage('attachment://' + found.donation_address + ".jpg")
-                            .addFields([
-                                {
-                                    name: "IOTA Address",
-                                    value: found.donation_address
-                                }
-                            ])
-                            // Set the main content of the embed
-                            .setFooter(
-                                'Trustify IOTA TipBot'
-                            )
-                        msg.channel.send(embed);
-                    }).catch(err => {
-                        console.error(err)
-                    })
+                    sendDonationMessage(msg, args[0], found.donation_address)
                 } else {
                     console.log("website not found.")
                     msg.channel.send("Website not found in Trustify registry :-(");
@@ -115,3 +89,35 @@ function validURL(str) {
     return !!pattern.test(str);
 }
 
+
+function sendDonationMessage(msg, name, donation_address) {
+    QRCode.toDataURL(donation_address).then((res) => {
+        var base64Data = res.replace(/^data:image\/png;base64,/, "");
+
+        fs.writeFileSync("./qr_codes/" + donation_address + ".jpg", base64Data, 'base64');
+        // Now save the data
+        const img_url = "http://localhost:3000/qr_codes/" + donation_address + ".jpg"
+        console.log("img_url", img_url)
+        const embed = new MessageEmbed()
+            // Set the title of the field
+            .setTitle(`Donate to ${name}`)
+            // Set the color of the embed
+            .setColor(COLOR)
+            .setDescription("Spend some IOTA with your IOTA Wallet. Just copy the address or scan the QR code.")
+            .attachFiles(img_url)
+            .setImage('attachment://' + donation_address + ".jpg")
+            .addFields([
+                {
+                    name: "IOTA Address",
+                    value: donation_address
+                }
+            ])
+            // Set the main content of the embed
+            .setFooter(
+                'Trustify IOTA TipBot'
+            )
+        msg.channel.send(embed);
+    }).catch(err => {
+        console.error(err)
+    })
+}
