@@ -1,3 +1,6 @@
 node_modules
 .env
 qr_codes/*
+npm-debug.log
+/*.env
+.DS_Store
