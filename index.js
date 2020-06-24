@@ -7,8 +7,9 @@ const tip = require('./src/commands/tip');
 const help = require('./src/commands/help');
 const add = require('./src/commands/add');
 
-const config = require('dotenv').config().parsed // Loads .env
+require('dotenv').config()
 
+const TOKEN = process.env.TOKEN
 
 app.use('/qr_codes', express.static(__dirname + '/qr_codes'));
 
@@ -23,8 +24,6 @@ const { COLOR, PREFIX } = require('./src/config');
 
 client.on('message', async msg => {
     try {
-        //return if other channel
-        // if (msg.channel.id != config.CHANNEL_ID) return
         // Getting content, author and channel out of message object
         let cont = msg.content,
             author = msg.author
@@ -44,7 +43,7 @@ client.on('message', async msg => {
     }
 })
 
-client.login(config.TOKEN)
+client.login(TOKEN)
 
 client.on('ready', () => {
     console.log(`Bot started as ${client.user.username}`)
