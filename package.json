@@ -1,14 +1,15 @@
 {
   "name": "tipbot-discord",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.1",
+  "description": "IOTA TipBot for Discord.",
   "main": "index.js",
-  "scripts": {
+   "scripts": {
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "huhn511",
+  "iota_address": "VO9H9GFNRTOLPUHM9MACFWSUFLNLDYCTKIPXCYLTNNNDMURPUIXNVBYQMRKOJDEYM9UDESGXBIWASIDRBFOBHCJGZD",
+  "license": "MIT",
   "dependencies": {
     "atob": "^2.1.2",
     "cross-blob": "^1.2.3",
@@ -20,5 +21,7 @@
     "qrcode": "^1.4.4",
     "request": "^2.88.2"
   },
-  "iota_address": "VO9H9GFNRTOLPUHM9MACFWSUFLNLDYCTKIPXCYLTNNNDMURPUIXNVBYQMRKOJDEYM9UDESGXBIWASIDRBFOBHCJGZD"
+  "engines": {
+    "node": "12.x"
+  }
 }
