@@ -1,6 +1,7 @@
 const { MessageEmbed } = require('discord.js');
 
 const { COLOR } = require('../config');
+const { addAddress } = require('../database');
 
 module.exports =
     function add(msg, args) {
@@ -9,7 +10,7 @@ module.exports =
 
         if(isValidIotaAddress(address)) {
 
-            addAddress(address, msg.author)
+            addAddress(msg.author.id, address)
 
             const embed = new MessageEmbed()
             // Set the title of the field
@@ -32,17 +33,4 @@ function isValidIotaAddress(address) {
     // TODO 
     if(address) return true
     return false
-}
-
-function addAddress(address, user) {
-
-    let user_object = {
-        type: "discord",
-        address: address,
-        data: {
-            user: user
-        }
-    }
-
-    console.log("user_object", user_object)
 }
