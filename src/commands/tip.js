@@ -48,8 +48,25 @@ module.exports = function tip(msg, args) {
                 if (found) {
                     sendDonationMessage(msg, args[0], found.donation_address)
                 } else {
-                    console.log("website not found.")
-                    msg.channel.send("Website not found in Trustify registry :-(");
+
+                    request(url, { json: true }, (err, res, body) => {
+                        if (err) { return console.log(err); }
+                        console.log("res", res)
+                        console.log("body", body)
+
+                        if (body.donation_address) {
+                            let name = url;
+                            if(body.name) {
+                                name = body.name + `\n${url}`
+                            }
+                            sendDonationMessage(msg, name, body.donation_address)
+                        } else {
+                            console.log("website not found.")
+                            msg.channel.send("Website not found in Trustify registry :-(");
+                        }
+                    })
+
+
                 }
             });
         }
@@ -69,37 +86,25 @@ module.exports = function tip(msg, args) {
             console.log("user address: ", address)
 
             let embed;
-            if(address) {
-                embed = new MessageEmbed()
-                // Set the title of the field
-                .setTitle('Tip - IOTA Tipbot')
-                // Set the color of the embed
-                .setColor(COLOR)
-                // Set the main content of the embed
-                .setDescription(`User ${args[0]} has this IOTA address ${address}`)
-        
+            if (address) {
+                sendDonationMessage(msg, args[0], address)
             } else {
-            embed = new MessageEmbed()
-                // Set the title of the field
-                .setTitle('Tip - IOTA Tipbot')
-                // Set the color of the embed
-                .setColor(COLOR)
-                // Set the main content of the embed
-                .setDescription(`User ${args[0]} has no iota address. \n
+                embed = new MessageEmbed()
+                    // Set the title of the field
+                    .setTitle('Tip - IOTA Tipbot')
+                    // Set the color of the embed
+                    .setColor(COLOR)
+                    // Set the main content of the embed
+                    .setDescription(`User ${args[0]} has no iota address. \n
                 ${args[0]} you can add by writing **/add <your address** here in the chat or directly to the Trustify TipBot.`);
-        
+
+                msg.channel.send(embed);
             }
-
-          msg.channel.send(embed);
         })
-   
-
     } else {
         msg.channel.send("tip to: ", args[0]);
     }
 }
-
-
 
 function validURL(str) {
     var pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
@@ -111,7 +116,6 @@ function validURL(str) {
     return !!pattern.test(str);
 }
 
-
 function sendDonationMessage(msg, name, donation_address) {
     QRCode.toDataURL(donation_address).then((res) => {
         var base64Data = res.replace(/^data:image\/png;base64,/, "");
@@ -122,10 +126,10 @@ function sendDonationMessage(msg, name, donation_address) {
         console.log("img_url", img_url)
         const embed = new MessageEmbed()
             // Set the title of the field
-            .setTitle(`Donate to ${name}`)
+            .setTitle(`Donate now to: `)
             // Set the color of the embed
             .setColor(COLOR)
-            .setDescription("Spend some IOTA with your IOTA Wallet. Just copy the address or scan the QR code.")
+            .setDescription(`\n\n**${name}** \n\n Spend  IOTA with your IOTA Wallet. Just copy the address or scan the QR code.`)
             .attachFiles(img_url)
             .setImage('attachment://' + donation_address + ".jpg")
             .addFields([
