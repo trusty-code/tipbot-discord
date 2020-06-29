@@ -12,6 +12,7 @@
   "license": "MIT",
   "dependencies": {
     "@iota/checksum": "^1.0.0-beta.30",
+    "@trustify/tipbot.ts": "^1.2.0",
     "atob": "^2.1.2",
     "cross-blob": "^1.2.3",
     "discord.js": "^12.2.0",
