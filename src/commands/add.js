@@ -1,7 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 
 const { COLOR } = require('../config');
-const { addAddress } = require('../database');
 const tipbot = require('@trustify/tipbot.ts');
 const checksum = require('@iota/checksum')
 

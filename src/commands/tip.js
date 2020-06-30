@@ -6,7 +6,7 @@ const { COLOR } = require('../config');
 
 const isGithubUrl = require('is-github-url');
 const getPackageJsonFromGithub = require('get-package-json-from-github');
-const { getAddress } = require('../database');
+const tipbot = require('@trustify/tipbot.ts');
 
 module.exports = function tip(msg, args) {
 
@@ -78,8 +78,9 @@ module.exports = function tip(msg, args) {
             id: args[0].substring(3, args[0].length - 1)
         }
 
+        tipbot.tip(user_id.id).then((address) => {
         console.log("tip to discord user_id", user_id)
-        getAddress(user_id.id).then((address) => {
+        // getAddress(user_id.id).then((address) => {
 
             console.log("what?")
             console.log("what?", address)
