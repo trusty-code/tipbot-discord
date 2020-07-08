@@ -1,0 +1,11 @@
+version: "3.1"
+services: 
+  postgres: 
+    image: postgres:11-alpine
+    restart: always
+    environment: 
+      POSTGRES_PASSWORD: tipbot
+      POSTGRES_USER: tipbot
+      POSTGRES_DB: tipbot
+    ports: 
+      - 5432:5432

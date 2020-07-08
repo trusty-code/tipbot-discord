@@ -2,12 +2,23 @@ const { Client, MessageEmbed } = require('discord.js');
 const client = new Client();
 const express = require('express');
 const app = express();
+require('dotenv').config()
 
 const tip = require('./src/commands/tip');
 const help = require('./src/commands/help');
 const add = require('./src/commands/add');
 
-require('dotenv').config()
+const tipbot = require('@trustify/tipbot.ts');
+
+console.log("tipbot", tipbot)
+const DB_USER = process.env.DB_USER
+const DB_PASSWORD = process.env.DB_PASSWORD
+const DB_URL = process.env.DB_URL
+const DB_PORT = process.env.DB_PORT
+const DB_NAME = process.env.DB_NAME
+
+tipbot.setDB(`postgresql://${DB_USER}:${DB_PASSWORD}@${DB_URL}:${DB_PORT}/${DB_NAME}`)
+
 
 const TOKEN = process.env.TOKEN
 
