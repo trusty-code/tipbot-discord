@@ -4,3 +4,4 @@ qr_codes/*
 npm-debug.log
 /*.env
 .DS_Store
+qr_codes
