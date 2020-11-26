@@ -21,7 +21,8 @@
     "get-package-json-from-github": "^1.2.1",
     "is-github-url": "^1.2.2",
     "qrcode": "^1.4.4",
-    "request": "^2.88.2"
+    "request": "^2.88.2",
+    "tinyurl": "^1.1.7"
   },
   "engines": {
     "node": "12.x"
