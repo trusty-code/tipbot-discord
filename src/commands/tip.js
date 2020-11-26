@@ -3,6 +3,7 @@ const request = require('request');
 const fs = require('fs');
 const { MessageEmbed } = require('discord.js');
 const { COLOR } = require('../config');
+var TinyURL = require('tinyurl');
 
 const isGithubUrl = require('is-github-url');
 const getPackageJsonFromGithub = require('get-package-json-from-github');
@@ -117,34 +118,37 @@ function validURL(str) {
     return !!pattern.test(str);
 }
 
-function sendDonationMessage(msg, name, donation_address) {
-    QRCode.toDataURL(donation_address).then((res) => {
+async function sendDonationMessage(msg, name, donation_address) {
+    try {
+        let res = await QRCode.toDataURL(donation_address)
         var base64Data = res.replace(/^data:image\/png;base64,/, "");
-
-        fs.writeFileSync("./qr_codes/" + donation_address + ".jpg", base64Data, 'base64');
         // Now save the data
+        fs.writeFileSync("./qr_codes/" + donation_address + ".jpg", base64Data, 'base64');
         const img_url = "http://localhost:3000/qr_codes/" + donation_address + ".jpg"
         console.log("img_url", img_url)
+        const deeplink = await TinyURL.shorten(`iota://${donation_address}/?amount=1&message=TipBot_tip`)
         const embed = new MessageEmbed()
-            // Set the title of the field
-            .setTitle(`Donate now to: `)
-            // Set the color of the embed
+            .setTitle(`Donate now to:`)
             .setColor(COLOR)
-            .setDescription(`\n\n**${name}** \n\n Spend  IOTA with your IOTA Wallet. Just copy the address or scan the QR code.`)
+            .setDescription(`\n\n**${name}**\n\nSpend IOTA with your IOTA Wallet. Just copy the address, scan the QR code or use the deeplink!`)
             .attachFiles(img_url)
             .setImage('attachment://' + donation_address + ".jpg")
             .addFields([
                 {
-                    name: "IOTA Address",
-                    value: donation_address
+                name: "Open with Trinity",
+                value: (`use this [deeplink](${deeplink})`)
+                },
+                {
+                name: "IOTA Address",
+                value: donation_address
                 }
             ])
             // Set the main content of the embed
             .setFooter(
-                'Trustify IOTA TipBot'
+                'IOTA TipBot'
             )
         msg.channel.send(embed);
-    }).catch(err => {
+    } catch (err) {
         console.error(err)
-    })
+    }
 }
