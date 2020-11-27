@@ -97,8 +97,33 @@ module.exports = function tip(msg, args) {
                     // Set the color of the embed
                     .setColor(COLOR)
                     // Set the main content of the embed
-                    .setDescription(`User ${args[0]} has no iota address. \n
-                ${args[0]} you can add by writing **/add <your address** here in the chat or directly to the Trustify TipBot.`);
+                    .setDescription(`User ${args[0]} has no iota address. \n${args[0]} you can add by writing **!add <your address>** here in the chat or directly to the IOTA TipBot.`);
+                msg.channel.send(embed);
+            }
+        })
+    } else if (args[0].substring(0, 2) == "<@") {
+        // Discord user: '<@!ID>'
+        let user_id = {
+           id: args[0].substring(2, args[0].length - 1)
+        }
+
+        tipbot.tip(user_id.id).then((address) => {
+        console.log("tip to discord user_id", user_id)
+        // getAddress(user_id.id).then((address) => {
+
+            console.log("user address: ", address)
+
+            let embed;
+            if (address) {
+                sendDonationMessage(msg, args[0], address)
+            } else {
+                embed = new MessageEmbed()
+                    // Set the title of the field
+                    .setTitle('Tip - IOTA Tipbot')
+                    // Set the color of the embed
+                    .setColor(COLOR)
+                    // Set the main content of the embed
+                    .setDescription(`User ${args[0]} has no iota address. \n${args[0]} you can add by writing **!add <your address>** here in the chat or directly to the IOTA TipBot.`);
 
                 msg.channel.send(embed);
             }
@@ -126,18 +151,14 @@ async function sendDonationMessage(msg, name, donation_address) {
         fs.writeFileSync("./qr_codes/" + donation_address + ".jpg", base64Data, 'base64');
         const img_url = "http://localhost:3000/qr_codes/" + donation_address + ".jpg"
         console.log("img_url", img_url)
-        const deeplink = await TinyURL.shorten(`iota://${donation_address}/?amount=1&message=TipBot_tip`)
+        const deeplink = await TinyURL.shorten(`iota://${donation_address}/?message=Tipped with Discord @IOTA TipBot`)
         const embed = new MessageEmbed()
             .setTitle(`Donate now to:`)
             .setColor(COLOR)
-            .setDescription(`\n\n**${name}**\n\nSpend IOTA with your IOTA Wallet. Just copy the address, scan the QR code or use the deeplink!`)
+            .setDescription(`\n\n**${name}**\n\nSpend IOTA with your IOTA Wallet. Just copy the address, scan the QR code or use the [IOTA deeplink for Trinity](${deeplink}).`)
             .attachFiles(img_url)
             .setImage('attachment://' + donation_address + ".jpg")
             .addFields([
-                {
-                name: "Open with Trinity",
-                value: (`use this [deeplink](${deeplink})`)
-                },
                 {
                 name: "IOTA Address",
                 value: donation_address
