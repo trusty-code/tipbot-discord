@@ -7,6 +7,7 @@ require('dotenv').config()
 const tip = require('./src/commands/tip');
 const help = require('./src/commands/help');
 const add = require('./src/commands/add');
+const del = require('./src/commands/del');
 
 const tipbot = require('@trustify/tipbot.ts');
 
@@ -28,7 +29,8 @@ app.use('/qr_codes', express.static(__dirname + '/qr_codes'));
 var cmds = {
     help,
     tip,
-    add
+    add,
+    del
 }
 
 const { COLOR, PREFIX } = require('./src/config');
