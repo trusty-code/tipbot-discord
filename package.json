@@ -17,7 +17,7 @@
     "cross-blob": "^1.2.3",
     "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "get-package-json-from-github": "^1.2.1",
     "is-github-url": "^1.2.2",
     "qrcode": "^1.4.4",
